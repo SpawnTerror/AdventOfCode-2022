@@ -1,6 +1,6 @@
 # SpawnTerror 2022
 # Python 3.11.1
-# AOC Day 1
+# AOC Day 1 
 
 # Parse input data into a list, strip line breaks
 with open('aoc22_day1.txt', 'r') as f:
