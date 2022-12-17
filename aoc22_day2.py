@@ -1,6 +1,6 @@
 # SpawnTerror 2022
 # Python 3.11.1
-# AOC Day 1 Part 1
+# AOC Day 2
 
 # Part 1
 # 1 for Rock, 2 for Paper, and 3 for Scissors
