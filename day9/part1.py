@@ -51,6 +51,6 @@ def processMovement(instructions):
         
     return tailPositions
 
-# Print results using LEN to count the items
+# Print results using len to count the items
 results = processMovement(instructions)
 print(f'Tail visited below locations',len(results),'times: \n', results)

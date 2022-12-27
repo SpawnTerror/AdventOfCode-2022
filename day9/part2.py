@@ -6,7 +6,7 @@
 # Between the coordinates of tail and head
 import numpy as np
 
-with open('day9/test.txt', 'r') as f:
+with open('day9/input.txt', 'r') as f:
     instructions = [line for line in f.read().split('\n')]
 
 def processMovement(instructions):
@@ -16,8 +16,7 @@ def processMovement(instructions):
     for _ in range(10):
         knots.append((0,0))
 
-    # Initiate a set for tail positions
-    # Set doesn't contain duplicates
+    # Initiate a SET for tail positions
     # Add 0,0 as starting position
     knotPositions = set()
     knotPositions.add(knots[-1])
@@ -35,25 +34,22 @@ def processMovement(instructions):
                 case 'L': knots[0] = (knots[0][0] - 1, knots[0][1])
                 case 'D': knots[0] = (knots[0][0], knots[0][1] - 1)
                 case 'U': knots[0] = (knots[0][0], knots[0][1] + 1)
-
-            # Get the difference between head and tail
+            
+            # Go through every knot in a set and update it
+            # Get the difference between them 1 by 1
             for c in range(9):
                 diffX = knots[c][0] - knots[c+1][0]
-                diffY = knots[c][1] - knots[c+1][0]
-          
-                # Numpy's SIGN function checks for sign
-                # Returns -1 | 0 | 1 for integers
-                # Check if HEAD moved away more than 1 cell away
-                if abs(diffX) > 1 or abs(diffY) > 1:
-                    
-                    # Add -1 or 0 or 1
+                diffY = knots[c][1] - knots[c+1][1]
+
+                # Add -1 or 0 or 1
+                if abs(diffX) > 1 or abs(diffY) > 1:     
                     knots[c+1] = (knots[c+1][0] + np.sign(diffX), knots[c+1][1] + np.sign(diffY))
-                    
-                    # Add to set of positions visited by the tail
-                knotPositions.add(knots[c-1])
-        print(knotPositions)
+                
+                # Update the knot positions
+                knotPositions.add(knots[-1])
+        
     return knotPositions
 
-# Print results using LEN to count the items
+# Print len of the results for number of locations visited
 results = processMovement(instructions)
-print(f'Tail visited locations',len(results),'times.')
+print(f'Tail knotPositions locations',len(results),'times.')
