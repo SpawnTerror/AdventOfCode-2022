@@ -2,32 +2,51 @@
 # Python 3.11.1
 # AOC Day 11 Part 1
 import re
-mDict = {}
-with open('day11/test.txt', 'r') as f:
-    for line in f.read().split('\n'):
-        if 'Monkey' in line:  
-            monkeyNunber = line[7]
-            mDict[monkeyNunber] = {}
-        if 'Starting' in line:
-            monkeyItems = [int(s) for s in re.findall(r'-?\d+\.?\d*', line)]
-            mDict[monkeyNunber]['Items'] = monkeyItems
-        if 'Operation' in line:
-            stressMonkey = line.partition('old ')[2]
-            print(stressMonkey)
-            mDict[monkeyNunber]['Stress'] = stressMonkey
-        if 'Test' in line:
-            divideMonkey = [int(s) for s in re.findall(r'-?\d+\.?\d*', line)]
-            mDict[monkeyNunber]['Divide'] = divideMonkey 
-        if 'true' in line:
-            throwMonkey = [int(s) for s in re.findall(r'-?\d+\.?\d*', line)]
-            mDict[monkeyNunber]['True'] = throwMonkey
-        if 'false' in line:
-            throwMonkey = [int(s) for s in re.findall(r'-?\d+\.?\d*', line)]
-            mDict[monkeyNunber]['False'] = throwMonkey
-
-for x in mDict:
-    print(f'Monkey {x} = ', mDict[x])
-    
-print(int(x) for x in mDict['2']['Divide'][0])
 
 
+def processMonkeys():
+    mDict = {}
+    with open('day11/input.txt', 'r') as f:
+        for line in f.read().split('\n'):
+            if 'Monkey' in line:  
+                monkeyNunber = int(line[7])
+                mDict[monkeyNunber] = {}
+            elif 'Starting' in line:
+                monkeyItems = [int(s) for s in re.findall(r'-?\d+\.?\d*', line)]
+                mDict[monkeyNunber]['Items'] = monkeyItems
+            elif 'Operation' in line:
+                stressMonkey = line.partition('old ')[2]
+                mDict[monkeyNunber]['Stress'] = stressMonkey
+            elif 'Test' in line:
+                divideMonkey = re.findall(r'-?\d+\.?\d*', line)
+                mDict[monkeyNunber]['Divide'] = int(divideMonkey[0]) 
+            elif 'true' in line:
+                throwMonkey = re.findall(r'-?\d+\.?\d*', line)
+                mDict[monkeyNunber]['True'] = int(throwMonkey[0])
+            elif 'false' in line:
+                throwMonkey = re.findall(r'-?\d+\.?\d*', line)
+                mDict[monkeyNunber]['False'] = int(throwMonkey[0])
+    return mDict
+
+def calculateStress(itemValue, monkey):
+    stressValue = monkeyDict[monkey]['Stress']
+    match stressValue[0]:
+        case '*':
+            print('Multiplication')
+            if stressValue[2:] == 'old':
+                itemValue = itemValue * itemValue
+            else:
+                itemValue = itemValue * int(stressValue[2:])
+        case '+':
+            itemValue = itemValue + int(stressValue[2:])
+    return itemValue
+
+# Parse input file
+monkeyDict = processMonkeys()
+
+# List all the data
+for x in monkeyDict:
+    print(f'Monkey {x} = ', monkeyDict[x])
+
+# Test calculations
+print(f'New value = ', calculateStress(79, 1))
