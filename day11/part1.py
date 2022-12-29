@@ -98,8 +98,3 @@ totalInspected.sort()
 monkeyBusiness = getResults(totalInspected)
 
 print(monkeyBusiness)
-
-
-
-
-
