@@ -1,8 +1,8 @@
 # SpawnTerror 2022
 # Python 3.11.1
 # AOC Day 11 Part 1
-import re
 
+import re
 
 def processMonkeys():
     mDict = {}
@@ -41,23 +41,91 @@ def calculateStress(itemValue, monkey):
             itemValue = itemValue + int(stressValue[2:])
     return itemValue
 
-# Parse input file
+def printMonkeys():
+    for x in monkeyDict:
+        print(f'Monkey {x} = ', monkeyDict[x])
+
+def calculateWorryLevel(monkey, item):
+    getFormula = monkeyDict[monkey]['Stress']
+    operationSign, number = getFormula[0], getFormula[2:]
+    
+    if number == "old": number = item
+    match operationSign:
+        case '*':
+            item = item * int(number)
+        case '+':
+            item = item + int(number)
+    return item
+
+def checkIfDivisible(monkey, item):
+    checkDivisionNumber = int(monkeyDict[monkey]['Divide'])
+    #print(f'Divide by {checkDivisionNumber}')
+    return (True if item % checkDivisionNumber == 0 else False)
+
+def throwItem(monkey, item, newItemToThrow, divisible):
+    trueMonkey = int(monkeyDict[monkey]['True'])
+    falseMonkey = int(monkeyDict[monkey]['False'])
+    monkeyDict[monkey]['Items'].remove(item)
+    if divisible:
+        monkeyDict[trueMonkey]['Items'].append(newItemToThrow)
+        #print(f'Throw {newItemToThrow} to {trueMonkey}')
+        #print(f'Appending', monkeyDict[trueMonkey]['Items'])
+        #print(f'---> This monkey now has <----')
+        #print(monkeyDict[trueMonkey])
+        x = trueMonkey
+        #print(x)
+    else:
+        monkeyDict[falseMonkey]['Items'].append(newItemToThrow)
+        #print(f'Throw {newItemToThrow} to {falseMonkey}')
+        x = falseMonkey
+        #print(x)
+    return x
+
+def round(rounds):
+    for _ in range(rounds):
+    
+        for monkey in monkeyDict:
+            
+            
+            noOfItems = len(monkeyDict[monkey]['Items'])
+            itemsToCheck = [int(item) for item in monkeyDict[monkey]['Items']]
+
+            if noOfItems >0:
+
+                for item in itemsToCheck:
+                    
+                    countItems[monkey] += 1
+
+                    newWorryLevel = calculateWorryLevel(monkey, item)
+                    newWorryLevelBy3 = int(newWorryLevel / 3)
+                    
+                    #print(f'--> Checking M{monkey} item {item}.')
+                    #print(f'New worry level is {newWorryLevel}, %3 is {newWorryLevelBy3}.')
+                    divisible = checkIfDivisible(monkey, newWorryLevelBy3)
+                    #print(f'Divisable status =  ', divisible)
+                    x = throwItem(monkey, item, newWorryLevelBy3, divisible)
+                    #print(f'---> This monkey no {x} now has <----')
+                    #print(monkeyDict[x])
+            else:
+                pass
+                # inactivate monkey {monkey}
+    return countItems
+
+def getResults(inspectedPerMonkey):
+    topOne, topTwo = inspectedPerMonkey[-2:]
+    return topOne * topTwo
+
 monkeyDict = processMonkeys()
+countItems = [0 for monkey in monkeyDict]
+totalItemsInspected = [0 for monkey in monkeyDict]
 
-# List all the data
-for x in monkeyDict:
-    print(f'Monkey {x} = ', monkeyDict[x])
+totalInspected = round(20)
+totalInspected.sort()
+monkeyBusiness = getResults(totalInspected)
 
-# Test calculations
-print(f'New value = ', calculateStress(79, 1))
+print(monkeyBusiness)
 
-''' Example output
-Monkey 0 =  {'Items': [93, 98], 'Stress': '* 17', 'Divide': 19, 'True': 5, 'False': 3}
-Monkey 1 =  {'Items': [95, 72, 98, 82, 86], 'Stress': '+ 5', 'Divide': 13, 'True': 7, 'False': 6}
-Monkey 2 =  {'Items': [85, 62, 82, 86, 70, 65, 83, 76], 'Stress': '+ 8', 'Divide': 5, 'True': 3, 'False': 0}        
-Monkey 3 =  {'Items': [86, 70, 71, 56], 'Stress': '+ 1', 'Divide': 7, 'True': 4, 'False': 5}
-Monkey 4 =  {'Items': [77, 71, 86, 52, 81, 67], 'Stress': '+ 4', 'Divide': 17, 'True': 1, 'False': 6}
-Monkey 5 =  {'Items': [89, 87, 60, 78, 54, 77, 98], 'Stress': '* 7', 'Divide': 2, 'True': 1, 'False': 4}
-Monkey 6 =  {'Items': [69, 65, 63], 'Stress': '+ 6', 'Divide': 3, 'True': 7, 'False': 2}
-Monkey 7 =  {'Items': [89], 'Stress': '* old', 'Divide': 11, 'True': 0, 'False': 2}
-'''
+
+
+
+
