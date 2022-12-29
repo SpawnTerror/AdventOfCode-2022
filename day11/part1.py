@@ -42,6 +42,7 @@ def calculateStress(itemValue, monkey):
     return itemValue
 
 def printMonkeys():
+    # For debugging
     for x in monkeyDict:
         print(f'Monkey {x} = ', monkeyDict[x])
 
@@ -59,7 +60,6 @@ def calculateWorryLevel(monkey, item):
 
 def checkIfDivisible(monkey, item):
     checkDivisionNumber = int(monkeyDict[monkey]['Divide'])
-    #print(f'Divide by {checkDivisionNumber}')
     return (True if item % checkDivisionNumber == 0 else False)
 
 def throwItem(monkey, item, newItemToThrow, divisible):
@@ -68,47 +68,22 @@ def throwItem(monkey, item, newItemToThrow, divisible):
     monkeyDict[monkey]['Items'].remove(item)
     if divisible:
         monkeyDict[trueMonkey]['Items'].append(newItemToThrow)
-        #print(f'Throw {newItemToThrow} to {trueMonkey}')
-        #print(f'Appending', monkeyDict[trueMonkey]['Items'])
-        #print(f'---> This monkey now has <----')
-        #print(monkeyDict[trueMonkey])
-        x = trueMonkey
-        #print(x)
     else:
         monkeyDict[falseMonkey]['Items'].append(newItemToThrow)
-        #print(f'Throw {newItemToThrow} to {falseMonkey}')
-        x = falseMonkey
-        #print(x)
-    return x
+    return 
 
 def round(rounds):
     for _ in range(rounds):
-    
         for monkey in monkeyDict:
-            
-            
             noOfItems = len(monkeyDict[monkey]['Items'])
             itemsToCheck = [int(item) for item in monkeyDict[monkey]['Items']]
-
             if noOfItems >0:
-
                 for item in itemsToCheck:
-                    
                     countItems[monkey] += 1
-
                     newWorryLevel = calculateWorryLevel(monkey, item)
-                    newWorryLevelBy3 = int(newWorryLevel / 3)
-                    
-                    #print(f'--> Checking M{monkey} item {item}.')
-                    #print(f'New worry level is {newWorryLevel}, %3 is {newWorryLevelBy3}.')
+                    newWorryLevelBy3 = int(newWorryLevel / 3)      
                     divisible = checkIfDivisible(monkey, newWorryLevelBy3)
-                    #print(f'Divisable status =  ', divisible)
                     x = throwItem(monkey, item, newWorryLevelBy3, divisible)
-                    #print(f'---> This monkey no {x} now has <----')
-                    #print(monkeyDict[x])
-            else:
-                pass
-                # inactivate monkey {monkey}
     return countItems
 
 def getResults(inspectedPerMonkey):
