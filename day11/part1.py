@@ -32,7 +32,6 @@ def calculateStress(itemValue, monkey):
     stressValue = monkeyDict[monkey]['Stress']
     match stressValue[0]:
         case '*':
-            print('Multiplication')
             if stressValue[2:] == 'old':
                 itemValue = itemValue * itemValue
             else:
