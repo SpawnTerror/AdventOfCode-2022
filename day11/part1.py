@@ -69,7 +69,6 @@ def throwItem(monkey, item, newItemToThrow, divisible):
         monkeyDict[trueMonkey]['Items'].append(newItemToThrow)
     else:
         monkeyDict[falseMonkey]['Items'].append(newItemToThrow)
-    return 
 
 def round(rounds):
     for _ in range(rounds):
